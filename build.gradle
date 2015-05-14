@@ -1,0 +1,38 @@
+//Gradle build file
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+sourceCompatibility = 1.8
+
+version = '2.0'
+
+// add << before { to prevent executing during configuration phase
+task initSourceFolders << {
+   sourceSets*.java.srcDirs*.each { it.mkdirs() }
+   sourceSets*.resources.srcDirs*.each { it.mkdirs() }
+}
+
+repositories {
+    mavenCentral()
+}
+
+eclipse {
+	classpath {
+		downloadSources = true // eigentlich default Wert
+		downloadJavadoc = true
+	}
+}
+
+eclipseClasspath {
+	dependsOn 'cleanEclipseClasspath'
+}
+
+dependencies {
+	// ein Logger
+	compile 'org.tinylog:tinylog:1.0-rc-3'
+
+	// junit-4.11.jar enthält nicht mehr die hamcrast jars (wenn sie über das maven-Repositorium
+ 	// geladen wird, sondern nur noch den Hinweis auf die Abhängigkeit
+    testCompile 'junit:junit:4.11'
+    testCompile 'org.hamcrest:hamcrest-library:1.3'
+}

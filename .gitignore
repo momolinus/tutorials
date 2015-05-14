@@ -2,3 +2,5 @@
 build/
 /bin/
 gradle-app.setting
+.classpath
+.project

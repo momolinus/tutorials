@@ -2,8 +2,10 @@ package de.m_bleil.javafx.properties;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleListProperty;
+
+import java.awt.Point;
+
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -55,5 +57,23 @@ public class InspectSimpleProperty {
 		assertThat(stringList, is(not(sameInstance(oldStringList))));
 		assertThat(stringList, is(not(sameInstance(wrappedStringList))));
 		assertThat(oldStringList, is(sameInstance(wrappedStringList)));
+	}
+
+	@Test
+	public void inspect_setValue_method_forSimpleObjectProperty() {
+		Point point = new Point(2, 4);
+		SimpleObjectProperty<Point> pointProperty = new SimpleObjectProperty<>();
+
+		// assumption: stores an reference to point, approved by taking a look into source code
+		pointProperty.set(point);
+		Point wrappedPoint = pointProperty.get();
+		assertThat(wrappedPoint, is(sameInstance(point)));
+
+		point.x = 3;
+		Point wrappedPoint2 = pointProperty.get();
+		assertThat(wrappedPoint2, is(sameInstance(point)));
+		assertThat(wrappedPoint2, is(sameInstance(wrappedPoint)));
+		assertThat(wrappedPoint.x, is(equalTo(3)));
+		assertThat(wrappedPoint2.x, is(equalTo(3)));
 	}
 }

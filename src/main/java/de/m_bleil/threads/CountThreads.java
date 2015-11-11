@@ -3,6 +3,9 @@
  */
 package de.m_bleil.threads;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.pmw.tinylog.Logger;
 
 public class CountThreads {
@@ -19,12 +22,12 @@ public class CountThreads {
     }
 
     public static void printAllThreads(Thread thread) {
+	List<ThreadGroup> threadGroups = new ArrayList<>();
 	ThreadGroup rootGroup;
 
-	rootGroup = thread.getThreadGroup();
-	while (rootGroup.getParent() != null) {
-	    rootGroup = rootGroup.getParent();
-	}
+
+	rootGroup = searchForRootGroup(thread);
+	threadGroups.add(rootGroup);
 
 	int threadsMaxCount = rootGroup.activeCount() * 10;
 	Thread[] allThreads = new Thread[threadsMaxCount];
@@ -36,17 +39,40 @@ public class CountThreads {
 	}
 
 	for (int i = 0; i < threadsCount; i++) {
-	    Logger.info("thread '{}' in group '{}'", allThreads[i].getName(), allThreads[i].getThreadGroup().getName());
+	    int threadParentsCount;
+
+	    threadParentsCount = getParentsCount(allThreads[i]);
+
+	    Logger.info("thread '{}' in group '{}' is {} a damon", allThreads[i].getName(), allThreads[i].getThreadGroup().getName());
 	}
+    }
+
+    private static ThreadGroup searchForRootGroup(Thread thread) {
+	ThreadGroup rootGroup;
+	rootGroup = thread.getThreadGroup();
+	while (rootGroup.getParent() != null) {
+	    rootGroup = rootGroup.getParent();
+	}
+	return rootGroup;
+    }
+
+    private static int getParentsCount(Thread thread) {
+	int parentsCount = 0;
+
+	ThreadGroup rootGroup;
+	rootGroup = thread.getThreadGroup();
+
+	while (rootGroup.getParent() != null) {
+	    rootGroup = rootGroup.getParent();
+	    parentsCount++;
+	}
+	return parentsCount;
     }
 
     public static void printAllThreadsCount(Thread thread) {
 	ThreadGroup rootGroup;
 
-	rootGroup = thread.getThreadGroup();
-	while (rootGroup.getParent() != null) {
-	    rootGroup = rootGroup.getParent();
-	}
+	rootGroup = searchForRootGroup(thread);
 
 	int threadsMaxCount = rootGroup.activeCount() * 10;
 	Thread[] allThreads = new Thread[threadsMaxCount];
@@ -64,10 +90,7 @@ public class CountThreads {
     public static void printAllGroups(Thread thread) {
 	ThreadGroup rootGroup;
 
-	rootGroup = thread.getThreadGroup();
-	while (rootGroup.getParent() != null) {
-	    rootGroup = rootGroup.getParent();
-	}
+	rootGroup = searchForRootGroup(thread);
 
 	int groupsMaxCount = rootGroup.activeGroupCount() * 10;
 	ThreadGroup[] allGroups = new ThreadGroup[groupsMaxCount];
@@ -81,4 +104,5 @@ public class CountThreads {
 	    Logger.info("thread  group '{}'", allGroups[i].getName());
 	}
     }
+
 }

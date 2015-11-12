@@ -68,6 +68,7 @@ public class ThreadToolBox {
 	ThreadGroup rootGroup;
 	rootGroup = thread.getThreadGroup();
 
+	// FIXME rootGroup could be null
 	while (rootGroup.getParent() != null) {
 	    rootGroup = rootGroup.getParent();
 	    parentsCount++;

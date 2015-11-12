@@ -38,6 +38,8 @@ public class ThreadToolBox {
 	}
 
 	for (int i = 0; i < threadsCount; i++) {
+
+	    //TODO with Guave multimap
 	    int threadParentsCount;
 
 	    threadParentsCount = getParentsCount(allThreads[i]);
@@ -68,10 +70,11 @@ public class ThreadToolBox {
 	ThreadGroup rootGroup;
 	rootGroup = thread.getThreadGroup();
 
-	// FIXME rootGroup could be null
-	while (rootGroup.getParent() != null) {
-	    rootGroup = rootGroup.getParent();
-	    parentsCount++;
+	if (rootGroup != null) {
+	    while (rootGroup.getParent() != null) {
+		rootGroup = rootGroup.getParent();
+		parentsCount++;
+	    }
 	}
 	return parentsCount;
     }

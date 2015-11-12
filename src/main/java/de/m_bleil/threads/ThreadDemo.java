@@ -15,6 +15,7 @@ public class ThreadDemo extends Application {
 	Logger.info("*** main before launching application ***");
 	ThreadToolBox.printAllThreads(Thread.currentThread());
 
+	Logger.info("*** next applications will be launched ***");
 	launch(args);
 
 	Logger.info("*** main after launching application ***");

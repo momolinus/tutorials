@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.pmw.tinylog.Logger;
 
-public class CountThreads {
+public class ThreadToolBox {
 
     /**
      * @param args
@@ -17,14 +17,13 @@ public class CountThreads {
 
 	Thread currentThread = Thread.currentThread();
 
-	printAllGroups(currentThread);
+	printAllThreads(currentThread);
 
     }
 
     public static void printAllThreads(Thread thread) {
 	List<ThreadGroup> threadGroups = new ArrayList<>();
 	ThreadGroup rootGroup;
-
 
 	rootGroup = searchForRootGroup(thread);
 	threadGroups.add(rootGroup);
@@ -43,7 +42,14 @@ public class CountThreads {
 
 	    threadParentsCount = getParentsCount(allThreads[i]);
 
-	    Logger.info("thread '{}' in group '{}' is {} a damon", allThreads[i].getName(), allThreads[i].getThreadGroup().getName());
+	    String ident = "";
+
+	    for (int r = 0; r < threadParentsCount; r++) {
+		ident += "  ";
+	    }
+	    Logger.info("{}thread '{}' in group '{}' is{}a damon and has {} parent{}", ident, allThreads[i].getName(),
+		    allThreads[i].getThreadGroup().getName(), (allThreads[i].isDaemon() ? " " : " not "),
+		    Integer.toString(threadParentsCount), (threadParentsCount > 1 ? "s" : ""));
 	}
     }
 

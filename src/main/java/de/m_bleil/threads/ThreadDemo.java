@@ -1,5 +1,7 @@
 package de.m_bleil.threads;
 
+import org.pmw.tinylog.Logger;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -8,52 +10,46 @@ import javafx.stage.Stage;
 
 public class ThreadDemo extends Application {
 
-	@Override
-	public void start(Stage primaryStage) {
-		FlowPane root = new FlowPane();
+    public static void main(String[] args) {
 
-		Scene scene = new Scene(root, 800, 600);
-		Button button = new Button("Exception");
+	Logger.info("*** main before launching application ***");
+	ThreadToolBox.printAllThreads(Thread.currentThread());
 
-		button.setOnAction(e -> {
-			Integer.parseInt("xyz");
-			// printThreads();
-		});
+	launch(args);
 
-		Button button2 = new Button("threads");
-		button2.setOnAction(e -> printThreads());
+	Logger.info("*** main after launching application ***");
+	ThreadToolBox.printAllThreads(Thread.currentThread());
 
-		root.getChildren().addAll(button, button2);
+    }
 
-		primaryStage.setScene(scene);
+    @Override
+    public void start(Stage primaryStage) {
+	FlowPane root = new FlowPane();
 
-		primaryStage.show();
+	Scene scene = new Scene(root, 800, 600);
+	Button button = new Button("Exception");
 
-		printThreads();
+	button.setOnAction(e -> {
+	    Integer.parseInt("xyz");
 
-	}
+	    // TODO wird nicht erreicht
+	    Logger.info("*** after Excpetion ***");
+	    ThreadToolBox.printAllThreads(Thread.currentThread());
+	});
 
-	public static void main(String[] args) {
-		launch(args);
+	Button button2 = new Button("threads");
+	button2.setOnAction(e -> {
+	    Logger.info("*** print threads ***");
+	    ThreadToolBox.printAllThreads(Thread.currentThread());
+	});
 
-		Thread[] threads = new Thread[100];
+	root.getChildren().addAll(button, button2);
 
-		int threadsCount = Thread.enumerate(threads);
+	primaryStage.setScene(scene);
 
-		System.out.println(threadsCount + "," + threads.length);
+	primaryStage.show();
 
-		printThreads();
-	}
-
-	public static void printThreads() {
-		Thread[] threads = new Thread[100];
-		int threadCount = Thread.enumerate(threads);
-
-		for (int i = 0; i < threadCount; i++) {
-			System.out.println(threads[i].getName() + ", id= " + threads[i].getId() + ", damon: "
-				+ threads[i].isDaemon() + ", group: " + threads[i].getThreadGroup().getName() + ", ex handler "
-				+ threads[i].getUncaughtExceptionHandler());
-		}
-		System.out.println();
-	}
+	Logger.info("*** applications stage shown ***");
+	ThreadToolBox.printAllThreads(Thread.currentThread());
+    }
 }

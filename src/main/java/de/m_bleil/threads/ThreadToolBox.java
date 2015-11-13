@@ -3,10 +3,10 @@
  */
 package de.m_bleil.threads;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.pmw.tinylog.Logger;
+
+import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.Multimap;
 
 public class ThreadToolBox {
 
@@ -22,11 +22,12 @@ public class ThreadToolBox {
     }
 
     public static void printAllThreads(Thread thread) {
-	List<ThreadGroup> threadGroups = new ArrayList<>();
+
+	System.out.println("current thread: " + thread.getName());
+
 	ThreadGroup rootGroup;
 
 	rootGroup = searchForRootGroup(thread);
-	threadGroups.add(rootGroup);
 
 	int threadsMaxCount = rootGroup.activeCount() * 10;
 	Thread[] allThreads = new Thread[threadsMaxCount];
@@ -37,21 +38,16 @@ public class ThreadToolBox {
 		    threadsMaxCount);
 	}
 
+	Multimap<ThreadGroup, Thread> threads = LinkedListMultimap.create();
 	for (int i = 0; i < threadsCount; i++) {
+	    threads.put(allThreads[i].getThreadGroup(), allThreads[i]);
+	}
 
-	    //TODO with Guave multimap
-	    int threadParentsCount;
-
-	    threadParentsCount = getParentsCount(allThreads[i]);
-
-	    String ident = "";
-
-	    for (int r = 0; r < threadParentsCount; r++) {
-		ident += "  ";
+	for (ThreadGroup g : threads.keySet()) {
+	    System.out.println(g.getName());
+	    for (Thread t : threads.get(g)) {
+		System.out.println("\t" + t.getName() + (t.isDaemon() ? " (daemon)" : ""));
 	    }
-	    Logger.info("{}thread '{}' in group '{}' is{}a damon and has {} parent{}", ident, allThreads[i].getName(),
-		    allThreads[i].getThreadGroup().getName(), (allThreads[i].isDaemon() ? " " : " not "),
-		    Integer.toString(threadParentsCount), (threadParentsCount > 1 ? "s" : ""));
 	}
     }
 
@@ -64,6 +60,7 @@ public class ThreadToolBox {
 	return rootGroup;
     }
 
+    @SuppressWarnings("unused")
     private static int getParentsCount(Thread thread) {
 	int parentsCount = 0;
 

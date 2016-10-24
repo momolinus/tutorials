@@ -6,6 +6,8 @@ package de.m_bleil.api_inspection.comparison;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
+import java.util.Comparator;
+
 import org.junit.Test;
 
 /**
@@ -43,6 +45,24 @@ public class StringCompareTest {
 		comparisonValue = "".compareTo("abcdef");
 		assertThat(comparisonValue, is(equalTo(-6)));
 		comparisonValue = "abcdef".compareTo("");
+		assertThat(comparisonValue, is(equalTo(6)));
+	}
+
+	@Test
+	public void testComparisonsForEmptyStringsWithComparator() {
+		Comparator<String> comparator;
+		int comparisonValue;
+
+		comparator = Comparator.naturalOrder();
+
+		comparisonValue = comparator.compare("", "1");
+		assertThat(comparisonValue, is(equalTo(-1)));
+		comparisonValue = comparator.compare("", "1");
+		assertThat(comparisonValue, is(equalTo(-1)));
+
+		comparisonValue = comparator.compare("", "abcdef");
+		assertThat(comparisonValue, is(equalTo(-6)));
+		comparisonValue = comparator.compare("abcdef", "");
 		assertThat(comparisonValue, is(equalTo(6)));
 	}
 }

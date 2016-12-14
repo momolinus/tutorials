@@ -28,4 +28,11 @@ public class MessageFormatTest {
 
 		assertThat(result, is(equalTo("text1 {0} text3")));
 	}
+
+	@Test
+	public void testQuoting_03() {
+		String result = MessageFormat.format("text1 '{'{0}'}' text3", "text2");
+
+		assertThat(result, is(equalTo("text1 {text2} text3")));
+	}
 }

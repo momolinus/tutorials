@@ -56,4 +56,13 @@ public class InspectChangeListener {
 
 		assertThat(counter.get(), is(equalTo(1)));
 	}
+
+	@Test
+	public void test_change_listener_3() {
+
+		projectName.set("test");
+		projectName.set("test");
+
+		assertThat(counter.get(), is(equalTo(1)));
+	}
 }

@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.Before;
 import org.junit.Test;
 
+import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
@@ -15,21 +16,27 @@ import javafx.beans.value.ObservableValue;
 public class InspectChangeListener {
 
 	private StringProperty projectName;
-	private AtomicInteger counter;
+	private AtomicInteger counterChangeListener;
+	private AtomicInteger counterInvalidationListener;
 
 	@Before
 	public void setup() {
 		projectName = new SimpleStringProperty("Project Java tutorial");
-		counter = new AtomicInteger();
+		counterChangeListener = new AtomicInteger();
+		counterInvalidationListener = new AtomicInteger();
 
 		projectName.addListener((ObservableValue<? extends String> name, String oldName,
 			String newName) -> {
 
-			counter.incrementAndGet();
+			counterChangeListener.incrementAndGet();
 
 			if (newName == null || newName.length() == 0) {
 				projectName.set(oldName);
 			}
+		});
+
+		projectName.addListener((Observable o) -> {
+			counterInvalidationListener.incrementAndGet();
 		});
 	}
 
@@ -38,7 +45,8 @@ public class InspectChangeListener {
 
 		projectName.set(null);
 
-		assertThat(counter.get(), is(equalTo(2)));
+		assertThat(counterChangeListener.get(), is(equalTo(2)));
+		assertThat(counterInvalidationListener.get(), is(equalTo(2)));
 	}
 
 	@Test
@@ -46,7 +54,8 @@ public class InspectChangeListener {
 
 		projectName.set("");
 
-		assertThat(counter.get(), is(equalTo(2)));
+		assertThat(counterChangeListener.get(), is(equalTo(2)));
+		assertThat(counterInvalidationListener.get(), is(equalTo(2)));
 	}
 
 	@Test
@@ -54,7 +63,8 @@ public class InspectChangeListener {
 
 		projectName.set("test");
 
-		assertThat(counter.get(), is(equalTo(1)));
+		assertThat(counterChangeListener.get(), is(equalTo(1)));
+		assertThat(counterInvalidationListener.get(), is(equalTo(1)));
 	}
 
 	@Test
@@ -63,6 +73,7 @@ public class InspectChangeListener {
 		projectName.set("test");
 		projectName.set("test");
 
-		assertThat(counter.get(), is(equalTo(1)));
+		assertThat(counterChangeListener.get(), is(equalTo(1)));
+		assertThat(counterInvalidationListener.get(), is(equalTo(1)));
 	}
 }

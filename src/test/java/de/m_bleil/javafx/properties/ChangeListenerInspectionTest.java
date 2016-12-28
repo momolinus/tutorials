@@ -1,3 +1,6 @@
+/*
+ * commented and created at 22.12.2016
+ */
 package de.m_bleil.javafx.properties;
 
 import static org.hamcrest.Matchers.*;
@@ -11,9 +14,16 @@ import org.junit.Test;
 import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
-public class InspectChangeListener {
+/**
+ * The Class ChangeListenerInspectionTest demonstrates the effect of reset value to old value using
+ * a {@linkplain ChangeListener}.
+ *
+ * @author Marcus Bleil, www.m-bleil.de
+ */
+public class ChangeListenerInspectionTest {
 
 	private StringProperty projectName;
 	private AtomicInteger counterChangeListener;

@@ -11,7 +11,7 @@ import javafx.collections.ObservableList;
 
 import org.junit.Test;
 
-public class InspectSimpleProperty {
+public class SimplePropertyInspectionTest {
 
 	@Test
 	public void inspect_setValue_method_for_SimpleBooleanProperty() {

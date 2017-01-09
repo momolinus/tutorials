@@ -26,12 +26,15 @@ import javafx.beans.value.ObservableValue;
 public class ChangeListenerInspectionTest {
 
 	private StringProperty projectName;
+	private StringProperty projectNameView;
 	private AtomicInteger counterChangeListener;
 	private AtomicInteger counterInvalidationListener;
 
 	@Before
 	public void setup() {
 		projectName = new SimpleStringProperty("Project Java tutorial");
+		projectNameView = new SimpleStringProperty(projectName.get());
+		
 		counterChangeListener = new AtomicInteger();
 		counterInvalidationListener = new AtomicInteger();
 
@@ -48,6 +51,8 @@ public class ChangeListenerInspectionTest {
 		projectName.addListener((Observable o) -> {
 			counterInvalidationListener.incrementAndGet();
 		});
+		
+		projectNameView.bindBidirectional(projectName);
 	}
 
 	@Test
@@ -57,6 +62,8 @@ public class ChangeListenerInspectionTest {
 
 		assertThat(counterChangeListener.get(), is(equalTo(2)));
 		assertThat(counterInvalidationListener.get(), is(equalTo(2)));
+		assertThat(projectName.get(), is(equalTo("Project Java tutorial")));
+		assertThat(projectNameView.get(), is(equalTo("Project Java tutorial")));
 	}
 
 	@Test
@@ -66,6 +73,8 @@ public class ChangeListenerInspectionTest {
 
 		assertThat(counterChangeListener.get(), is(equalTo(2)));
 		assertThat(counterInvalidationListener.get(), is(equalTo(2)));
+		assertThat(projectName.get(), is(equalTo("Project Java tutorial")));
+		assertThat(projectNameView.get(), is(equalTo("Project Java tutorial")));
 	}
 
 	@Test
@@ -75,6 +84,8 @@ public class ChangeListenerInspectionTest {
 
 		assertThat(counterChangeListener.get(), is(equalTo(1)));
 		assertThat(counterInvalidationListener.get(), is(equalTo(1)));
+		assertThat(projectName.get(), is(equalTo("test")));
+		assertThat(projectNameView.get(), is(equalTo("test")));
 	}
 
 	@Test
@@ -85,5 +96,7 @@ public class ChangeListenerInspectionTest {
 
 		assertThat(counterChangeListener.get(), is(equalTo(1)));
 		assertThat(counterInvalidationListener.get(), is(equalTo(1)));
+		assertThat(projectName.get(), is(equalTo("test")));
+		assertThat(projectNameView.get(), is(equalTo("test")));
 	}
 }

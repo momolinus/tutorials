@@ -3,8 +3,9 @@
  */
 package de.m_bleil.java_api.datetime;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 import java.time.LocalDate;
 import java.time.Month;

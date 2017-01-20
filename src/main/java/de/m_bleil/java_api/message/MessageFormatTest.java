@@ -3,8 +3,9 @@
  */
 package de.m_bleil.java_api.message;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 import java.text.MessageFormat;
 

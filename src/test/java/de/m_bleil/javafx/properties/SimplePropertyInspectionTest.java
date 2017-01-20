@@ -5,11 +5,11 @@ import static org.junit.Assert.assertThat;
 
 import java.awt.Point;
 
+import org.junit.Test;
+
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
-import org.junit.Test;
 
 public class SimplePropertyInspectionTest {
 

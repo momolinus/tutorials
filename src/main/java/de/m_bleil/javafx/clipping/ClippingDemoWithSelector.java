@@ -1,45 +1,58 @@
 package de.m_bleil.javafx.clipping;
 
+import org.pmw.tinylog.Logger;
+
 import javafx.application.Application;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.effect.GaussianBlur;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.scene.*;
+import javafx.scene.control.*;
+import javafx.scene.effect.*;
+import javafx.scene.image.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.*;
 import javafx.stage.Stage;
 
 public class ClippingDemoWithSelector extends Application {
 
-	private ImageView imageView;
-	private Pane whiteImagePane;
-	private Circle redCircleNode;
-	private Canvas simpleOvalCanvas;
-	private Canvas complexesBluerCanvas;
-	private StackPane kombi = new StackPane();
-	private StackPane kombi2 = new StackPane();
+	private static final String FIRST_FILE = "buchstaben.jpg";
 
-	private Rectangle rec;
+	public static void main(String[] args) {
+		launch(args);
+	}
+
+	private ColorAdjust colorEffect;
+
+	private ImageView imageView;
+	private ImageView imageViewBlur;
+
+	private GaussianBlur kombiniert;
+
+	private StackPane stimulusPane;
+
+	private RadioButton circle;
 
 	@Override
 	public void start(Stage primaryStage) {
 
-		buildClippingNodes();
+		initEffects();
 
 		BorderPane root = new BorderPane();
 
 		// https://www.flickr.com/photos/marcus-bleil/15956654341/in/album-72157649566590176/
 		// licenses: https://creativecommons.org/licenses/by/2.0/
-		Image image = new Image(getClass().getResourceAsStream("teneriffa.jpg"));
+		Image image = new Image(getClass().getResourceAsStream(FIRST_FILE));
+
+		imageViewBlur = new ImageView(image);
+		imageViewBlur.setEffect(new GaussianBlur(20));
+
 		imageView = new ImageView(image);
-		Pane imageViewContainer = new Pane(imageView);
+		stimulusPane = new StackPane(imageView);
+		Pane imageViewContainer = new Pane(stimulusPane);
+		imageViewContainer.setBorder(new Border(
+			new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, null)));
 
 		imageViewContainer.setOnMouseMoved(e -> {
 			if (imageView.getClip() != null) {
@@ -47,12 +60,16 @@ public class ClippingDemoWithSelector extends Application {
 				double y = e.getY();
 
 				Node clip = imageView.getClip();
-				clip.setLayoutX(x);
-				clip.setLayoutY(y);
+				clip.setLayoutX(x - clip.getBoundsInParent().getWidth());
+				clip.setLayoutY(y - clip.getBoundsInParent().getHeight());
 			}
 		});
+		imageViewContainer.setCursor(Cursor.NONE);
 
-		root.setTop(buildClippingChoiceBox());
+		HBox control =
+			new HBox(buildClippingChoiceBox(), buildEffectChoiceBox(), buildFileSelector());
+		control.setPadding(new Insets(5, 0, 20, 0));
+		root.setTop(control);
 		root.setCenter(imageViewContainer);
 
 		Scene scene = new Scene(root, 800, 600);
@@ -61,85 +78,27 @@ public class ClippingDemoWithSelector extends Application {
 		primaryStage.show();
 	}
 
-	private void buildClippingNodes() {
-		Image whiteImage = new Image(getClass().getResourceAsStream("white.jpg"));
-		whiteImagePane = new Pane(new ImageView(whiteImage));
-		whiteImagePane.setLayoutX(50);
-		whiteImagePane.setLayoutY(50);
-
-		redCircleNode = new Circle(100, Color.RED);
-		redCircleNode.setLayoutX(250);
-		redCircleNode.setLayoutY(200);
-
-		simpleOvalCanvas = new Canvas(400, 300);
-		GraphicsContext graphics = simpleOvalCanvas.getGraphicsContext2D();
-		// Farbe nicht notwendig
-		graphics.fillRect(0, 0, 200, 175);
-		simpleOvalCanvas.setLayoutX(50);
-		simpleOvalCanvas.setLayoutY(50);
-
-		rec = new Rectangle(200, 175, new Color(0, 0, 0, 0.5));
-		rec = new Rectangle(200, 175);
-		rec.setLayoutX(50);
-		rec.setLayoutY(50);
-		// rec.setEffect(new GaussianBlur());
-
-		buildComplexBlurCanvas();
-
-		buildKombiniertesCanvas();
-		buildKombiniertesCanvas2();
-	}
-
 	/**
-	 * 
+	 * @return
 	 */
-	private void buildKombiniertesCanvas() {
+	private Node buildFileSelector() {
+		ComboBox<String> fileSelector = new ComboBox<>();
+		ObservableList<String> files =
+			FXCollections.observableArrayList("target2 (5).jpg", "teneriffa.jpg", "buchstaben.jpg");
 
-		Rectangle r1 = new Rectangle(200, 175, new Color(1, 1, 1, 0.5));
-		// r1.setEffect(new GaussianBlur());
-		Rectangle r2 = new Rectangle(100, 75);
-		r2.setLayoutX(50);
-		r2.setLayoutY(60);
+		fileSelector.setItems(files);
+		fileSelector.getSelectionModel().select(FIRST_FILE);
 
-		Pane blurPane = new Pane(r1);
-		blurPane.setEffect(new GaussianBlur());
-		kombi.getChildren().addAll(blurPane, r2);
-		// kombi.setBlendMode(BlendMode.EXCLUSION);
-		kombi.setLayoutX(50);
-		kombi.setLayoutY(50);
-	}
+		fileSelector.getSelectionModel().selectedItemProperty().addListener(l -> {
+			String fileName = fileSelector.getSelectionModel().getSelectedItem();
+			Image image = new Image(getClass().getResourceAsStream(fileName));
 
-	private void buildKombiniertesCanvas2() {
+			imageView.setImage(image);
+			imageViewBlur.setImage(image);
 
-		Rectangle r1 = new Rectangle(200, 175, new Color(1, 1, 1, 0.5));
-		// r1.setEffect(new GaussianBlur());
-		Rectangle r2 = new Rectangle(100, 75);
-		r2.setLayoutX(50);
-		r2.setLayoutY(60);
+		});
 
-		kombi2.getChildren().addAll(r1, r2);
-		// kombi.setBlendMode(BlendMode.EXCLUSION);
-		kombi2.setLayoutX(50);
-		kombi2.setLayoutY(50);
-	}
-
-	/**
-	 * 
-	 */
-	private void buildComplexBlurCanvas() {
-		complexesBluerCanvas = new Canvas(400, 300);
-		complexesBluerCanvas.setLayoutX(50);
-		complexesBluerCanvas.setLayoutY(50);
-
-		GraphicsContext graphics = complexesBluerCanvas.getGraphicsContext2D();
-
-		// hat keinen Effekt
-		// graphics.setFill(new Color(0.5, 0.5, 0.5, 1));
-		// dagegen schon
-		// graphics.setFill(new Color(0.5, 0.5, 0.5, 0.5));
-		graphics.fillRect(0, 0, 300, 200);
-
-		complexesBluerCanvas.setEffect(new GaussianBlur());
+		return fileSelector;
 	}
 
 	/**
@@ -154,51 +113,164 @@ public class ClippingDemoWithSelector extends Application {
 		noClipping.setToggleGroup(group);
 		noClipping.setOnAction(e -> imageView.setClip(null));
 
-		RadioButton whitePicture = new RadioButton("weißes Bild");
-		whitePicture.setToggleGroup(group);
-		whitePicture.setOnAction(e -> {
-			// whiteImagePane.setBlendMode(BlendMode.MULTIPLY);
-			imageView.setClip(whiteImagePane);
+		RadioButton squareSmall = new RadioButton("Quadrat klein");
+		squareSmall.setToggleGroup(group);
+		squareSmall.setOnAction(e -> {
+			imageView.setClip(new Rectangle(50, 50));
 		});
 
-		RadioButton redCircle = new RadioButton("roter Kreis");
-		redCircle.setToggleGroup(group);
-		redCircle.setOnAction(e -> imageView.setClip(redCircleNode));
-
-		RadioButton simpleCanvas = new RadioButton("einfaches Canvas");
-		simpleCanvas.setToggleGroup(group);
-		simpleCanvas.setOnAction(e -> {
-			imageView.setEffect(null);
-			imageView.setClip(simpleOvalCanvas);
+		RadioButton squareMedium = new RadioButton("Quadrat mittel");
+		squareMedium.setToggleGroup(group);
+		squareMedium.setOnAction(e -> {
+			imageView.setClip(new Rectangle(100, 100));
 		});
 
-		RadioButton blur = new RadioButton("unschärfe");
-		blur.setToggleGroup(group);
-		blur.setOnAction(e -> {
-			imageView.setEffect(new GaussianBlur());
-			imageView.setClip(rec);
+		RadioButton squareLarge = new RadioButton("Quadrat groß");
+		squareLarge.setToggleGroup(group);
+		squareLarge.setOnAction(e -> {
+			imageView.setClip(new Rectangle(200, 200));
 		});
 
-		RadioButton k = new RadioButton("kombi");
-		k.setToggleGroup(group);
-		k.setOnAction(e -> {
-
-			imageView.setClip(kombi);
+		circle = new RadioButton("Kreis mit Maus im Mittelpunkt");
+		circle.setToggleGroup(group);
+		circle.setOnAction(e -> {
+			Circle circleClip = new Circle(100, 100, 50);
+			imageView.setClip(circleClip);
 		});
 
-		RadioButton k2 = new RadioButton("kombi 2");
-		k2.setToggleGroup(group);
-		k2.setOnAction(e -> {
-
-			imageView.setClip(kombi2);
+		RadioButton circle2 = new RadioButton("Kreis (kleiner) mit Maus am Rand");
+		circle2.setToggleGroup(group);
+		circle2.setOnAction(e -> {
+			Circle circleClip = new Circle(50, 50, 50);
+			imageView.setClip(circleClip);
 		});
 
-		vbox.getChildren().addAll(noClipping, whitePicture, redCircle, simpleCanvas, blur, k, k2);
+		RadioButton path = new RadioButton("\"freie\" Form");
+		path.setToggleGroup(group);
+		path.setOnAction(e -> {
+			imageView.setClip(buildPath());
+		});
+
+		vbox.getChildren().addAll(	noClipping, squareSmall, squareMedium, squareLarge, circle,
+									circle2, path);
 
 		return vbox;
 	}
 
-	public static void main(String[] args) {
-		launch(args);
+	private Node buildEffectChoiceBox() {
+		VBox vbox = new VBox();
+		ToggleGroup group = new ToggleGroup();
+
+		RadioButton noEffect = new RadioButton("kein Effekt");
+		noEffect.setToggleGroup(group);
+		noEffect.setSelected(true);
+		noEffect.setOnAction(e -> {
+			imageView.setEffect(null);
+		});
+
+		RadioButton bluer1 = new RadioButton("Unschärfe (standard)");
+		bluer1.setToggleGroup(group);
+		bluer1.setOnAction(e -> {
+			imageView.setEffect(new GaussianBlur());
+		});
+
+		RadioButton bluer2 = new RadioButton("leichte Unschärfe");
+		bluer2.setToggleGroup(group);
+		bluer2.setOnAction(e -> {
+			imageView.setEffect(new GaussianBlur(5.0));
+		});
+
+		RadioButton farbe = new RadioButton("Farbveränderung");
+		farbe.setToggleGroup(group);
+		farbe.setOnAction(e -> {
+			imageView.setEffect(colorEffect);
+		});
+
+		RadioButton komb = new RadioButton("eine Kombination");
+		komb.setToggleGroup(group);
+		komb.setOnAction(e -> {
+			imageView.setEffect(kombiniert);
+		});
+
+		RadioButton special = new RadioButton("\"Spezial\"-Effekt");
+		special.setToggleGroup(group);
+		special.selectedProperty().addListener((v, oldV, newV) -> {
+
+			if (special.isSelected()) {
+				imageView.setEffect(null);
+				stimulusPane.getChildren().add(imageViewBlur);
+				imageView.toFront();
+			}
+			else {
+				stimulusPane.getChildren().remove(imageViewBlur);
+				Logger.debug("blur image removed");
+			}
+		});
+
+		RadioButton special2 = new RadioButton("\"Spezial\"-Effekt (2)");
+		special2.setToggleGroup(group);
+		special2.selectedProperty().addListener((v, oldV, newV) -> {
+
+			if (special2.isSelected()) {
+				WritableImage noiseImage = new WritableImage((int) imageView.getImage().getWidth(),
+					(int) imageView.getImage().getHeight());
+
+				PixelWriter writer = noiseImage.getPixelWriter();
+
+				for (int x = 0; x < noiseImage.getWidth() - 2; x += 2) {
+					for (int y = 0; y < noiseImage.getHeight() - 2; y += 2) {
+						double colorV = Math.random();
+						writer.setColor(x, y, new Color(colorV, colorV, colorV,
+							Math.random() * 0.5 + 0.5));
+						writer.setColor(x, y + 1, new Color(colorV, colorV, colorV,
+							Math.random() * 0.5 + 0.5));
+						writer.setColor(x + 1, y, new Color(Math.random(), Math.random(),
+							Math.random(), Math.random() * 0.5 + 0.5));
+						// writer.setColor(x + 1, y + 1,
+						// new Color(Math.random(), Math.random(), Math.random(), 1));
+					}
+				}
+
+				ImageInput noiseInput = new ImageInput(noiseImage);
+				Blend blend = new Blend(BlendMode.SRC_ATOP);
+				blend.setBottomInput(new GaussianBlur(2.0));
+				blend.setTopInput(noiseInput);
+
+				imageView.setEffect(blend);
+			}
+			else {
+
+			}
+		});
+
+		vbox.getChildren().addAll(noEffect, bluer1, bluer2, farbe, komb, special, special2);
+
+		return vbox;
+	}
+
+	/**
+	 * @return
+	 */
+	private Node buildPath() {
+		Circle lupe = new Circle(75, 75, 75);
+		Rectangle griff = new Rectangle(40, 100);
+		griff.setRotate(135);
+		griff.setX(110);
+		griff.setY(110);
+		return Shape.union(lupe, griff);
+	}
+
+	private void initEffects() {
+		colorEffect = new ColorAdjust();
+		colorEffect.setContrast(-0.8);
+		colorEffect.setSaturation(-0.8);
+
+		ColorAdjust colorEffect2 = new ColorAdjust();
+		colorEffect2.setContrast(-0.8);
+		colorEffect2.setSaturation(-0.8);
+
+		kombiniert = new GaussianBlur();
+		kombiniert.setInput(colorEffect2);
+
 	}
 }

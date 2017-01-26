@@ -28,6 +28,10 @@ eclipseClasspath {
 }
 
 dependencies {
+	// https://mvnrepository.com/artifact/org.asynchttpclient/async-http-client
+	compile group: 'org.asynchttpclient', name: 'async-http-client', version: '2.0.25'
+	
+
 	// ein Logger
 	compile 'org.tinylog:tinylog:1.0-rc-3'
 

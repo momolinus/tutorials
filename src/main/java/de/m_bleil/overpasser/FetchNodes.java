@@ -3,12 +3,15 @@
  */
 package de.m_bleil.overpasser;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
+import org.asynchttpclient.*;
 
 import hu.supercluster.overpasser.library.output.*;
 import hu.supercluster.overpasser.library.query.OverpassQuery;
@@ -23,33 +26,33 @@ public class FetchNodes {
 	 */
 	public static void main(String[] args) {
 		String query = new OverpassQuery()
-			.format(OutputFormat.JSON)
+			.format(OutputFormat.XML)
 			.timeout(60)
 			.filterQuery()
 			.node()
 			.tag("railway", "station")
 			// .tagNot("access", "private")
-			.boundingBox(52.8408089, 12.2297711, 53.6785119, 13.8548903)
+			.boundingBox(52.84, 12.23, 53.68, 13.85)
 			.end()
 			.output(OutputVerbosity.BODY, OutputModificator.CENTER, OutputOrder.QT, 10)
 			.build();
 
 		System.out.println(query);
 
-		try {
-			URL url = new URL("http://overpass-api.de/api/interpreter?data=" + query);
+		String server = "http://overpass-api.de/api/interpreter?data=";
+		try (AsyncHttpClient asyncHttpClient = new DefaultAsyncHttpClient()) {
+			Future<Response> f = asyncHttpClient.prepareGet(server + query).execute();
 
-			try (InputStream is = url.openStream();
-				Scanner scanner = new Scanner(is, StandardCharsets.UTF_8.name())) {
+			Response r = f.get();
 
-				System.out.println(scanner.useDelimiter("\\Z").next());
-			}
-			catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			String resultText = r.getResponseBody(StandardCharsets.UTF_8);
+			System.out.println(resultText);
+			try (BufferedWriter outputFile =
+				Files.newBufferedWriter(Paths.get("stations.osm.xml"), StandardCharsets.UTF_8)) {
+				outputFile.write(resultText);
 			}
 		}
-		catch (MalformedURLException e) {
+		catch (InterruptedException | ExecutionException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

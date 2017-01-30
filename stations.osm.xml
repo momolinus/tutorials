@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="Overpass API">
+<note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>
+<meta osm_base="2017-01-25T19:48:02Z"/>
+
+  <node id="30229471" lat="52.8533306" lon="12.4500127">
+    <tag k="name" v="Neustadt (Dosse)"/>
+    <tag k="note" v="&quot;Neustadt (Dosse)&quot; ist die offizielle Betriebsstellenbezeichnung, &quot;Neustadt(Dosse)&quot; die in Fahrplanmedien verwendete Bezeichnung"/>
+    <tag k="operator" v="DB Station&amp;Service AG"/>
+    <tag k="railway" v="station"/>
+    <tag k="railway:ref" v="WNS"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="501732505" lat="52.8884823" lon="12.4571814">
+    <tag k="name" v="Bahnhof Wusterhausen"/>
+    <tag k="railway" v="station"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="32912570" lat="52.9423364" lon="12.3909043">
+    <tag k="addr:city" v="Kyritz"/>
+    <tag k="addr:housenumber" v="1"/>
+    <tag k="addr:postcode" v="16866"/>
+    <tag k="addr:street" v="Am Bahnhof"/>
+    <tag k="name" v="Kyritz"/>
+    <tag k="railway" v="station"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="32863032" lat="53.1074168" lon="12.2694977">
+    <tag k="name" v="Bölzke"/>
+    <tag k="railway" v="station"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="32863019" lat="53.0765454" lon="12.3339637">
+    <tag k="name" v="Blumenthal"/>
+    <tag k="railway" v="station"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="292572433" lat="53.1205495" lon="12.5219789">
+    <tag k="name" v="Dossow (Prign)"/>
+    <tag k="operator" v="DB Station&amp;Service AG"/>
+    <tag k="railway" v="station"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="246238933" lat="53.1605639" lon="12.4788599">
+    <tag k="name" v="Wittstock (Dosse)"/>
+    <tag k="railway" v="station"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="3239187600" lat="52.9263651" lon="12.7941323">
+    <tag k="name" v="Neuruppin West"/>
+    <tag k="railway" v="station"/>
+    <tag k="wheelchair" v="yes"/>
+    <tag k="wheelchair_toilet" v="unknown"/>
+  </node>
+  <node id="1334540476" lat="52.9296912" lon="12.8106801">
+    <tag k="name" v="Rheinsberger Tor"/>
+    <tag k="operator" v="DB Station&amp;Service AG"/>
+    <tag k="railway" v="station"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="3827714918" lat="52.9054160" lon="12.9780496">
+    <tag k="name" v="Herzberg (Mark)"/>
+    <tag k="operator" v="Regio Infra Nord-Ost GmbH &amp; Co. KG"/>
+    <tag k="operator:wikidata" v="Q2138117"/>
+    <tag k="public_transport" v="station"/>
+    <tag k="railway" v="station"/>
+    <tag k="railway:ref" v="WHE"/>
+    <tag k="wheelchair" v="no"/>
+  </node>
+
+</osm>

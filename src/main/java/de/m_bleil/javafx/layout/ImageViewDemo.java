@@ -3,6 +3,7 @@ package de.m_bleil.javafx.layout;
 import org.pmw.tinylog.Logger;
 
 import javafx.application.Application;
+import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -15,6 +16,22 @@ import javafx.stage.Stage;
 public class ImageViewDemo extends Application {
 
 	public static void logBounds(Node node) {
+		Logger.info("{} layout x/y = {}", node.getId(), node.layoutXProperty().get(),
+					node.layoutYProperty().get());
+
+		logBounds(node.getId() + " layout bounds", node.layoutBoundsProperty().get());
+		logBounds(node.getId() + " bounds local", node.getBoundsInLocal());
+		logBounds(node.getId() + " bounds in parent", node.getBoundsInParent());
+
+		Logger.info("{} bounds parent {}", node.getId(), node.boundsInParentProperty().get());
+	}
+
+	private static void logBounds(String name, Bounds bounds) {
+		Logger.info("{}  x/y/w/h = {}/{}/{}/{}", name, bounds.getMinX(), bounds.getMinY(),
+					bounds.getMaxX(), bounds.getMaxY());
+	}
+
+	public static void logBoundsFull(Node node) {
 		Logger.info("{} layout x/y = {}", node.getId(), node.layoutXProperty().get(),
 					node.layoutYProperty().get());
 		Logger.info("{} layout bounds {}", node.getId(), node.layoutBoundsProperty().get());

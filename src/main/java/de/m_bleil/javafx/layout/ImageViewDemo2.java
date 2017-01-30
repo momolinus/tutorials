@@ -3,11 +3,11 @@ package de.m_bleil.javafx.layout;
 import org.pmw.tinylog.Logger;
 
 import javafx.application.Application;
-import javafx.scene.Node;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 public class ImageViewDemo2 extends Application {
@@ -33,8 +33,16 @@ public class ImageViewDemo2 extends Application {
 		debugPrintButton.relocate(400, 50);
 
 		// TODO mit FlowPane sieht das ganz anders aus, da geht translate aber nicht relocate
-		Pane root = new Pane();
-		root.getChildren().addAll(imageView, debugPrintButton);
+		// Pane root = new Pane();
+		// root.getChildren().addAll(imageView, debugPrintButton);
+
+		// BorderPane root = new BorderPane();
+		// root.setCenter(imageView);
+		// root.setTop(debugPrintButton);
+
+		FlowPane root = new FlowPane();
+		root.setAlignment(Pos.CENTER);
+		root.getChildren().addAll(debugPrintButton, imageView);
 
 		Scene scene = new Scene(root, 800, 600);
 

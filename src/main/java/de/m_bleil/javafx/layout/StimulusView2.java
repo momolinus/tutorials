@@ -5,6 +5,7 @@ package de.m_bleil.javafx.layout;
 
 import org.pmw.tinylog.Logger;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
@@ -16,36 +17,13 @@ import javafx.scene.shape.*;
 /**
  * @author Marcus Bleil, www.marcusbleil.de
  */
-public class StimulusView extends Region implements DebugLogAble {
-
-	private Border border;
-
-	private Border border2;
-
-	private Border border3;
+public class StimulusView2 extends Region implements DebugLogAble {
 
 	private ImageView imageView;
 
 	private Pane pane;
 
-	private FlowPane flowPane;
-
-	/**
-	 * @param image
-	 * @param i
-	 * @param j
-	 */
-	public StimulusView(Image image, double width, double height) {
-
-		BorderStrokeStyle outsideStyle = new BorderStrokeStyle(StrokeType.OUTSIDE,
-			StrokeLineJoin.ROUND, StrokeLineCap.SQUARE, 0, 0, null);
-
-		border = new Border(new BorderStroke(Color.GOLD, outsideStyle, null, new BorderWidths(5)));
-		border2 =
-			new Border(new BorderStroke(Color.MAGENTA, outsideStyle, null, new BorderWidths(5)));
-		border3 = new Border(new BorderStroke(Color.CYAN, outsideStyle, null, new BorderWidths(5)));
-
-		double borderSize = border3.getOutsets().getBottom();
+	public StimulusView2(Image image, double width, double height) {
 
 		imageView = new ImageView(image);
 		imageView.setPreserveRatio(true);
@@ -59,27 +37,19 @@ public class StimulusView extends Region implements DebugLogAble {
 		imageView.setId("image_view");
 
 		pane = new Pane(imageView);
-		pane.setBorder(border);
+		pane.setBackground(new Background(new BackgroundFill(Color.RED, null, null)));
 		pane.setId("pane_with_image_view");
+
 		pane.setOnMouseEntered(e -> Logger.info("mouse entered in image's pane container"));
 		pane.setOnMouseExited(e -> Logger.info("mouse exited from image's pane container"));
 
-		flowPane = new FlowPane(pane);
-		flowPane.setAlignment(Pos.CENTER);
-		flowPane.setBorder(border2);
-		flowPane.setPrefSize(	imageView.getFitWidth() + 2 * borderSize,
-								imageView.getFitHeight() + 2 * borderSize);
-		flowPane.setLayoutX(borderSize);
-		flowPane.setLayoutY(borderSize);
-		flowPane.setId("flow_pane_with_pane");
+		// Pane geht hier nicht, weil es die Insets nicht berücksichtigt
+		StackPane pane2 = new StackPane();
+		pane2.setPadding(new Insets(15));
+		pane2.getChildren().add(pane);
+		pane2.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, null, null)));
 
-		getChildren().add(flowPane);
-
-		this.setPrefSize(	flowPane.getPrefWidth() + 2 * borderSize,
-							flowPane.getPrefHeight() + 2 * borderSize);
-		this.setBorder(border3);
-		this.setLayoutX(2 * borderSize);
-		this.setLayoutY(2 * borderSize);
+		getChildren().add(pane2);
 
 		this.setId("stimulus_view");
 	}
@@ -94,8 +64,6 @@ public class StimulusView extends Region implements DebugLogAble {
 		ImageViewDemo.logBounds(pane);
 		System.out.println();
 
-		ImageViewDemo.logResizeableProperty(flowPane);
-		ImageViewDemo.logBounds(flowPane);
 		System.out.println();
 
 		ImageViewDemo.logResizeableProperty(this);

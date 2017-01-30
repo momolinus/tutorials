@@ -26,11 +26,14 @@ public class ImageViewDemo2 extends Application {
 		// image view has only CCS attributes of Node, so you can't set borders
 		// see:
 		// https://docs.oracle.com/javase/8/javafx/api/javafx/scene/doc-files/cssref.html#imageview
-		StimulusView imageView = new StimulusView(image, 300, 300);
+		StimulusView2 imageView = new StimulusView2(image, 300, 300);
 		imageView.setId("imageView");
 
 		Button debugPrintButton = new Button("debug log");
 		debugPrintButton.relocate(400, 50);
+
+		Button skipClip = new Button("translate clip");
+		skipClip.setOnAction(e -> imageView.translateClip());
 
 		// TODO mit FlowPane sieht das ganz anders aus, da geht translate aber nicht relocate
 		// Pane root = new Pane();
@@ -40,9 +43,11 @@ public class ImageViewDemo2 extends Application {
 		// root.setCenter(imageView);
 		// root.setTop(debugPrintButton);
 
+		// imageView.setRotate(30);
+
 		FlowPane root = new FlowPane();
 		root.setAlignment(Pos.CENTER);
-		root.getChildren().addAll(debugPrintButton, imageView);
+		root.getChildren().addAll(new VBox(debugPrintButton, skipClip), imageView);
 
 		Scene scene = new Scene(root, 800, 600);
 

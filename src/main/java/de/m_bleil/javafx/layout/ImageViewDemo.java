@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 public class ImageViewDemo extends Application {
 
 	public static void logBounds(Node node) {
-		Logger.info("{} layout x/y = {}", node.getId(), node.layoutXProperty().get(),
+		Logger.info("{} layout x/y = {}/{}", node.getId(), node.layoutXProperty().get(),
 					node.layoutYProperty().get());
 
 		logBounds(node.getId() + " layout bounds", node.layoutBoundsProperty().get());
@@ -27,12 +27,12 @@ public class ImageViewDemo extends Application {
 	}
 
 	private static void logBounds(String name, Bounds bounds) {
-		Logger.info("{}  x/y/w/h = {}/{}/{}/{}", name, bounds.getMinX(), bounds.getMinY(),
+		Logger.info("{}  x/y/x_m/y_m = {}/{}/{}/{}", name, bounds.getMinX(), bounds.getMinY(),
 					bounds.getMaxX(), bounds.getMaxY());
 	}
 
 	public static void logBoundsFull(Node node) {
-		Logger.info("{} layout x/y = {}", node.getId(), node.layoutXProperty().get(),
+		Logger.info("{} layout x/y = {}/{}", node.getId(), node.layoutXProperty().get(),
 					node.layoutYProperty().get());
 		Logger.info("{} layout bounds {}", node.getId(), node.layoutBoundsProperty().get());
 		Logger.info("{} bounds local {}", node.getId(), node.boundsInLocalProperty().get());

@@ -28,11 +28,9 @@ eclipseClasspath {
 }
 
 dependencies {
+	compile fileTree("libs")
 
 	compile group: 'org.asynchttpclient', name: 'async-http-client', version: '2.0.25'
-
-	// ein Logger
-	compile 'org.tinylog:tinylog:1.0-rc-3'
 
 	compile 'com.google.guava:guava:18.0'
 

@@ -30,8 +30,12 @@ eclipseClasspath {
 dependencies {
 	compile fileTree("libs")
 
+	// https://mvnrepository.com/artifact/org.asynchttpclient/async-http-client
 	compile group: 'org.asynchttpclient', name: 'async-http-client', version: '2.0.25'
 
+
+	// ein Logger
+	compile 'org.tinylog:tinylog:1.0-rc-3'
 	compile 'com.google.guava:guava:18.0'
 
 	// junit-4.11.jar enthält nicht mehr die hamcrast jars (wenn sie über das maven-Repositorium

@@ -1,7 +1,7 @@
 /**
- *
+ * created at 25.01.2017
  */
-package de.m_bleil.overpasser;
+package de.m_bleil.async;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -17,14 +17,15 @@ import hu.supercluster.overpasser.library.output.*;
 import hu.supercluster.overpasser.library.query.OverpassQuery;
 
 /**
- * @author Marcus Bleil, www.marcusbleil.de
+ * @author Marcus Bleil, www.m-bleil.de
  */
-public class FetchNodes {
+public class Demo {
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
+
 		String query = new OverpassQuery()
 			.format(OutputFormat.XML)
 			.timeout(60)
@@ -32,31 +33,30 @@ public class FetchNodes {
 			.node()
 			.tag("railway", "station")
 			// .tagNot("access", "private")
-			.boundingBox(52.84, 12.23, 53.68, 13.85)
+			.boundingBox(52.82, 11.94, 53.89, 14.10)
 			.end()
-			.output(OutputVerbosity.BODY, OutputModificator.CENTER, OutputOrder.QT, 10)
+			.output(OutputVerbosity.BODY, OutputModificator.CENTER, OutputOrder.QT, 10000)
 			.build();
 
-		System.out.println(query);
-
-		String server = "http://overpass-api.de/api/interpreter?data=";
 		try (AsyncHttpClient asyncHttpClient = new DefaultAsyncHttpClient()) {
+
+			String server = "http://overpass-api.de/api/interpreter?data=";
+
+			String data = "[out:xml][timeout:25];(node[\"kayak_rental\"=\"yes\"]"
+				+ "(52.82,11.94,53.85,14.10););" + "out body;>;out skel qt;";
+
 			Future<Response> f = asyncHttpClient.prepareGet(server + query).execute();
 
 			Response r = f.get();
+			String result = r.getResponseBody(StandardCharsets.UTF_8);
 
-			String resultText = r.getResponseBody(StandardCharsets.UTF_8);
-			System.out.println(resultText);
-			try (BufferedWriter outputFile =
-				Files.newBufferedWriter(Paths.get("stations.osm.xml"), StandardCharsets.UTF_8)) {
-				outputFile.write(resultText);
+			try (BufferedWriter writer =
+				Files.newBufferedWriter(Paths.get("result.osm.xml"), StandardCharsets.UTF_8)) {
+				writer.write(result);
 			}
 		}
 		catch (InterruptedException | ExecutionException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
-
 }

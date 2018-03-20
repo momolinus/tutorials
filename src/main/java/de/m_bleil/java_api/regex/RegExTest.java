@@ -11,8 +11,7 @@ import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 /**
  * @author Marcus Bleil, www.m-bleil.de
@@ -52,6 +51,7 @@ public class RegExTest {
 		assertThat("lookup for LF (\\012)", matches, is(equalTo(1)));
 	}
 
+	@Ignore
 	@Test
 	public void testThatOne_CR_isPresent() {
 		Matcher matcher = Pattern.compile("\\015").matcher(text);
@@ -74,6 +74,7 @@ public class RegExTest {
 		assertThat("lookup for Newline (\\n)", matches, is(equalTo(1)));
 	}
 
+	@Ignore
 	@Test
 	public void testHowAllNewlinesReplaced() {
 		String textWithoutNewLines = text.replaceAll("\\n", "");

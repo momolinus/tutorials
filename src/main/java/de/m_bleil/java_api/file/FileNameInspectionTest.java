@@ -15,11 +15,10 @@ import org.junit.Test;
 public class FileNameInspectionTest {
 
 	@Test
-	public void test() {
+	public void testGetName() {
 		File aFile = new File("path1/path2/file.txt");
 
 		assertThat(aFile.getParent(), is(equalTo("path1\\path2")));
 		assertThat(aFile.getName(), is(equalTo("file.txt")));
 	}
-
 }

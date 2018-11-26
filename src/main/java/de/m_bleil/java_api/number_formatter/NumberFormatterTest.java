@@ -24,4 +24,13 @@ public class NumberFormatterTest {
 
 		assertThat(number, is(equalTo("001")));
 	}
+
+	@Test
+	public void testDecimalFormat_02() {
+		NumberFormat formatter = new DecimalFormat("#.####");
+
+		String number = formatter.format(1.23456789);
+
+		assertThat(number, is(equalTo("1,2346")));
+	}
 }

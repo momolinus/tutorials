@@ -33,4 +33,14 @@ public class NumberFormatterTest {
 
 		assertThat(number, is(equalTo("1,2346")));
 	}
+
+	@Test
+	public void testDecimalFormat_03() {
+
+		String number = String.format("%02d", 2);
+		assertThat(number, is(equalTo("02")));
+		
+		number = String.format("%03d", 2);
+		assertThat(number, is(equalTo("002")));
+	}
 }

@@ -7,9 +7,12 @@ sourceCompatibility = 1.8
 version = '2.1'
 
 // add << before { to prevent executing during configuration phase
-task initSourceFolders << {
-   sourceSets*.java.srcDirs*.each { it.mkdirs() }
-   sourceSets*.resources.srcDirs*.each { it.mkdirs() }
+task initSourceFolders {
+
+	doLast {
+   		sourceSets*.java.srcDirs*.each { it.mkdirs() }
+   		sourceSets*.resources.srcDirs*.each { it.mkdirs() }
+	}
 }
 
 repositories {

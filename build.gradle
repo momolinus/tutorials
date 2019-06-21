@@ -36,6 +36,8 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.asynchttpclient/async-http-client
 	compile group: 'org.asynchttpclient', name: 'async-http-client', version: '2.0.25'
 
+	// https://mvnrepository.com/artifact/org.jsoup/jsoup
+	compile group: 'org.jsoup', name: 'jsoup', version: '1.12.1'
 
 	// ein Logger
 	compile 'org.tinylog:tinylog:1.3.4'

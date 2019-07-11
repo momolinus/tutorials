@@ -1,7 +1,7 @@
 /*
  * commented and created at 22.12.2016
  */
-package de.m_bleil.javafx.properties;
+package de.m_bleil.javafx;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;

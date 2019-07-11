@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.m_bleil.api_inspection.comparison;
+package de.m_bleil.java_api.comparator;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;

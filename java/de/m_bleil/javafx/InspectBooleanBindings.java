@@ -1,7 +1,7 @@
 /**
  *
  */
-package de.m_bleil.javafx.properties;
+package de.m_bleil.javafx;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;

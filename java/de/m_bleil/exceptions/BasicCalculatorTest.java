@@ -1,4 +1,4 @@
-package de.ing_bleil.tutorials.exceptions;
+package de.m_bleil.exceptions;
 
 import org.junit.Before;
 import org.junit.Test;

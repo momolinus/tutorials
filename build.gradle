@@ -6,13 +6,28 @@ sourceCompatibility = 1.8
 
 version = '2.1'
 
-// add << before { to prevent executing during configuration phase
-task initSourceFolders {
+sourceSets {
+    main {
+        java {
+            srcDir 'java'
+        }
+        /*
+        resources {
+        	srcDir 'res'
+        }
+        */
+   }
 
-	doLast {
-   		sourceSets*.java.srcDirs*.each { it.mkdirs() }
-   		sourceSets*.resources.srcDirs*.each { it.mkdirs() }
-	}
+/*
+   test {
+   		java {
+   			srcDir 'tests'
+   		}
+   		resources {
+        	srcDir 'testsres'
+        }
+   }
+   */
 }
 
 repositories {
@@ -49,4 +64,8 @@ dependencies {
     compile 'org.hamcrest:hamcrest-library:1.3'
     compile group: 'com.google.guava', name: 'guava', version: '20.0'
     compile group: 'hu.supercluster', name: 'overpasser', version: '0.2.2'
+
+    // https://mvnrepository.com/artifact/org.assertj/assertj-core
+	compile group: 'org.assertj', name: 'assertj-core', version: '3.13.2'
+
 }

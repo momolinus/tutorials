@@ -6,6 +6,7 @@ package de.m_bleil.java_api.path;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -31,5 +32,21 @@ public class InspectPath {
 		Path relativizeed = p1.relativize(p2);
 
 		assertThat(relativizeed.toString(), is(equalTo("..\\..\\root\\documents")));
+	}
+
+	@Test
+	public void testGetNameCount() {
+		Path p1, p2,p3,p4;
+
+		p1 = Paths.get("home/user/documents/text.txt");
+		p2 = Paths.get("home/root/documents");
+		p3 = Paths.get("/");
+		p4 = Paths.get("../../");
+
+
+		assertThat(p1.getNameCount()).isEqualTo(4);
+		assertThat(p2.getNameCount()).isEqualTo(3);
+		assertThat(p3.getNameCount()).isEqualTo(0);
+		assertThat(p4.getNameCount()).isEqualTo(2);
 	}
 }

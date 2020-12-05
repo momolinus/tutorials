@@ -1,4 +1,4 @@
-package de.m_bleil.api_inspection;
+package de.m_bleil;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;

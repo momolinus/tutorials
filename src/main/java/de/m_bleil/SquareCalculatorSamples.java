@@ -1,4 +1,4 @@
-package de.ing_bleil.tutorials.exceptions;
+package de.m_bleil;
 
 public class SquareCalculatorSamples {
 

@@ -1,7 +1,7 @@
 /**
  * created 02.05.2017
  */
-package de.m_bleil.api_inspection.comparator;
+package de.m_bleil.comparison;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;

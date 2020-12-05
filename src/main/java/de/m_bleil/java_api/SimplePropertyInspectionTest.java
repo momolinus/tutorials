@@ -1,4 +1,4 @@
-package de.m_bleil.javafx.properties;
+package de.m_bleil.java_api;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;

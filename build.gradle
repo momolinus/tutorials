@@ -4,7 +4,7 @@ apply plugin: 'eclipse'
 
 sourceCompatibility = 1.8
 
-version = '2.1'
+version = '3.0'
 
 // add << before { to prevent executing during configuration phase
 task initSourceFolders  {
@@ -32,19 +32,15 @@ eclipseClasspath {
 }
 
 dependencies {
-	compile fileTree("libs")
-
-	compile group: 'org.asynchttpclient', name: 'async-http-client', version: '2.0.25'
-
-	compile 'com.google.guava:guava:18.0'
+	compile group: 'org.asynchttpclient', name: 'async-http-client', version: '2.12.1'
 	
 	compile 'org.tinylog:tinylog:1.3.6'
 	compile 'org.tinylog:slf4j-binding:1.3.6'
 
 	// junit-4.11.jar enthält nicht mehr die hamcrast jars (wenn sie über das maven-Repositorium
  	// geladen wird, sondern nur noch den Hinweis auf die Abhängigkeit
-    compile 'junit:junit:4.11'
-    compile 'org.hamcrest:hamcrest-library:1.3'
-    compile group: 'com.google.guava', name: 'guava', version: '20.0'
+    compile 'junit:junit:4.13.1'
+    compile 'org.hamcrest:hamcrest-library:2.2'
+    compile group: 'com.google.guava', name: 'guava', version: '30.1-jre'
     compile group: 'hu.supercluster', name: 'overpasser', version: '0.2.2'
 }

@@ -26,7 +26,7 @@ public class NameCoder {
 	private String prefix = "";
 
 	public NameCoder(String name) {
-		this.name = Objects.requireNonNull(name, "code must not be null");
+		this.name = Objects.requireNonNull(name, "name must not be null");
 
 		List<String> tokens = Arrays
 			.stream(name.split("_"))

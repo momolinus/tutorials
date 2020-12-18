@@ -4,9 +4,8 @@ package de.m_bleil.comparison;
  * created 02.05.2017
  */
 
-
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.text.ParseException;
 import java.text.RuleBasedCollator;

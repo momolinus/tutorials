@@ -3,24 +3,14 @@
  */
 package de.m_bleil.async;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
-import java.util.Scanner;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
-import org.asynchttpclient.AsyncHttpClient;
-import org.asynchttpclient.DefaultAsyncHttpClient;
-import org.asynchttpclient.Response;
 
 import hu.supercluster.overpasser.library.output.OutputFormat;
 import hu.supercluster.overpasser.library.output.OutputModificator;
@@ -43,7 +33,7 @@ public class OverpassQueryApp {
 		    .timeout(60)
 		    .filterQuery()
 		    .node()
-		    .tag("kayak_rental", "yes")
+		    .tag("amenity", "supermarket")
 		    .boundingBox(52.82, 11.94, 53.89, 14.10)
 		    .end()
 		    .output(OutputVerbosity.BODY,
@@ -52,18 +42,24 @@ public class OverpassQueryApp {
 			    10000)
 		    .build();
 
-	    String server = "http://overpass-api.de/api/interpreter?data=";
 	    HttpClient client = HttpClient.newHttpClient();
+
+	    URI uri = new URI(
+		    "https",
+		    "overpass-api.de",
+		    "/api/interpreter",
+		    "data=" + query,
+		    null);
+	    System.out.println(uri.toString());
 	    HttpRequest request = HttpRequest
-		    .newBuilder(URI.create(server + query))
+		    .newBuilder(uri)
 		    .timeout(Duration.ofSeconds(5))
 		    .build();
-	    HttpResponse<InputStream> response = client.send(request,
-		    HttpResponse.BodyHandlers.ofInputStream());
-
+	    HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
+	    System.out.println(response.statusCode());
 	    System.out.println(response.body());
 	}
-	catch (IOException | InterruptedException e) {
+	catch (IOException | InterruptedException | URISyntaxException e) {
 	    e.printStackTrace();
 	}
     }

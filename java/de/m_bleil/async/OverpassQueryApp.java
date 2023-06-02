@@ -41,16 +41,21 @@ public class OverpassQueryApp {
 			    OutputOrder.QT,
 			    10000)
 		    .build();
-
+	    System.out.println(query);
 	    HttpClient client = HttpClient.newHttpClient();
+
+	    String test = "[out:xml][timeout:60];"
+		    + " (node[\"amenity\"=\"shops\"]"
+		    + "(52.82,11.94,53.89,14.1);<;); out body center qt 10000;";
 
 	    URI uri = new URI(
 		    "https",
 		    "overpass-api.de",
 		    "/api/interpreter",
-		    "data=" + query,
+		    "data=" + query.replaceAll("\"", ""),
 		    null);
 	    System.out.println(uri.toString());
+
 	    HttpRequest request = HttpRequest
 		    .newBuilder(uri)
 		    .timeout(Duration.ofSeconds(5))
